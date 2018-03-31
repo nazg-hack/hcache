@@ -18,7 +18,7 @@ class MemcachedCacheTest extends TestCase {
     $cache = new MemcachedCache();
     $mc = new Memcached('mc');
     $mc->addServers(array(
-      ['192.168.11.32', 11211],
+      ['127.0.0.1', 11211],
     ));
     $cache->setMemcached($mc);
     $cache->save("qwerty", new Element('testing:cache', 0));
