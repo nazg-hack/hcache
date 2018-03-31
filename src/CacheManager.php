@@ -20,15 +20,17 @@ namespace Nazg\HCache;
 use Nazg\Exception\CacheProviderNameExistsException;
 
 class CacheManager {
-  
+
   protected string $namespace = 'NazgHCacheNamespace[%s]';
 
   protected Map<string, classname<CacheProvider>> $cache = Map {
     'apc' => \Nazg\HCache\Driver\ApcCache::class,
     'void' => \Nazg\HCache\Driver\VoidCache::class,
     'map' => \Nazg\HCache\Driver\MapCache::class,
+    'file' => \Nazg\HCache\Driver\FileSystemCache::class,
+    'memcached' => \Nazg\HCache\Driver\MemcachedCache::class,
   };
-  
+
   protected Map<string, (function():CacheProvider)> $userCache = Map{};
 
   public function createCache(string $namedCache): ?CacheProvider {
@@ -44,7 +46,7 @@ class CacheManager {
   }
 
   public function addCache(
-    string $name, 
+    string $name,
     (function():CacheProvider) $cache
   ): void {
     if($this->cache->contains($name)) {

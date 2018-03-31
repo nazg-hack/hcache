@@ -17,33 +17,60 @@
  */
 namespace Nazg\HCache\Driver;
 
+use Memcached;
 use Nazg\HCache\Element;
 use Nazg\HCache\CacheProvider;
 
-class ApcCache extends CacheProvider {
+class MemcachedCache extends CacheProvider {
+
+  protected ?Memcached $memcached;
+
+  public function setMemcached(Memcached $memcached): void {
+    $this->memcached = $memcached;
+  }
+
+  public function getMemcached(): Memcached  {
+    invariant(
+      $this->memcached instanceof Memcached,
+      "Type mismatch"
+    );
+    return $this->memcached;
+  }
 
   <<__Override>>
   public function fetch(string $id): mixed {
-    return \apc_fetch($id);
+    $element = $this->getMemcached()->get($id);
+    if($element instanceof Element) {
+      return $element->getData();
+    }
+    return;
   }
 
   <<__Override>>
   public function contains(string $id): bool {
-    return \apc_exists($id);
+    $memcached = $this->getMemcached();
+    $memcached->get($id);
+    return $memcached->getResultCode() === Memcached::RES_SUCCESS;
   }
 
   <<__Override>>
   public function save(string $id, Element $element): bool {
-    return \apc_store($id, $element->getData(), $element->getLifetime());
+    $lifeTime = $element->getLifetime();
+    if ($element->getLifetime() > 30 * 24 * 3600) {
+      $lifeTime = time() + $element->getLifetime();
+    }
+    return $this->getMemcached()->set($id, $element, (int) $lifeTime);
   }
 
   <<__Override>>
   public function delete(string $id): bool {
-    return \apc_delete($id);
+    $memcached = $this->getMemcached();
+    return $memcached->delete($id)
+      || $memcached->getResultCode() === Memcached::RES_NOTFOUND;
   }
 
   <<__Override>>
   public function flushAll(): bool {
-    return \apc_clear_cache() && \apc_clear_cache('user');
+    return $this->getMemcached()->flush();
   }
 }

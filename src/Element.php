@@ -20,7 +20,7 @@ namespace Nazg\HCache;
 class Element {
 
   public function __construct(
-    protected mixed $data, 
+    protected mixed $data,
     protected int $lifetime = 0
   ) { }
 
@@ -29,6 +29,6 @@ class Element {
   }
 
   public function getLifetime(): int {
-    return $this->lifetime ? time() + $this->lifetime : 0;
+    return $this->lifetime;
   }
 }

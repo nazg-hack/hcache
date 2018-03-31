@@ -23,7 +23,7 @@ interface Cacheable {
 
   public function contains(string $id): bool;
 
-  public function save(string $id, mixed $data, int $lifeTime = 0): bool;
+  public function save(string $id, Element $element): bool;
 
   public function delete(string $id): bool;
 }

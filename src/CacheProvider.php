@@ -21,5 +21,5 @@ use Nazg\HCache\{Cacheable, FlushableCache};
 
 <<__ConsistentConstruct>>
 abstract class CacheProvider implements Cacheable, FlushableCache {
-  
+
 }
