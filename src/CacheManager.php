@@ -21,14 +21,13 @@ use Nazg\Exception\CacheProviderNameExistsException;
 
 class CacheManager {
 
-  protected string $namespace = 'NazgHCacheNamespace[%s]';
-
   protected Map<string, classname<CacheProvider>> $cache = Map {
     'apc' => \Nazg\HCache\Driver\ApcCache::class,
     'void' => \Nazg\HCache\Driver\VoidCache::class,
     'map' => \Nazg\HCache\Driver\MapCache::class,
     'file' => \Nazg\HCache\Driver\FileSystemCache::class,
     'memcached' => \Nazg\HCache\Driver\MemcachedCache::class,
+    'redis' => \Nazg\HCache\Driver\RedisCache::class,
   };
 
   protected Map<string, (function():CacheProvider)> $userCache = Map{};
@@ -45,13 +44,17 @@ class CacheManager {
     return null;
   }
 
+  /**
+   * append custom cache driver
+   */
   public function addCache(
     string $name,
     (function():CacheProvider) $cache
   ): void {
-    if($this->cache->contains($name)) {
-      throw new CacheProviderNameExistsException();
-    }
+    // allow override hcache driver
     $this->userCache->add(Pair{$name, $cache});
+    if($this->cache->contains($name)) {
+      $this->cache->remove($name);
+    }
   }
 }

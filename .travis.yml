@@ -3,9 +3,13 @@ sudo: required
 dist: trusty
 php:
  - hhvm
+ 
 services:
  - memcached
+ - redis
+
 install: composer install
+
 script:
  - hh_client
  - hhvm vendor/bin/phpunit
