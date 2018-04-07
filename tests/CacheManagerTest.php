@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Nazg\HCache\Element;
 use Nazg\HCache\CacheManager;
 use Nazg\HCache\CacheProvider;
+use Nazg\HCache\Driver\{MapCache, FileSystemCache, ApcCache, MemcachedCache, RedisCache, VoidCache};
 
 class CacheManagerTest extends TestCase {
 
@@ -11,6 +12,19 @@ class CacheManagerTest extends TestCase {
     $manager = new CacheManager();
     $manager->addCache('null', () ==> new NullCache());
     $this->assertInstanceOf(NullCache::class, $manager->createCache('null'));
+    // override cache driver
+    $manager->addCache('map', () ==> new NullCache());
+    $this->assertInstanceOf(NullCache::class, $manager->createCache('map'));
+  }
+
+  public function testShouldReturnCacheDrivers(): void {
+    $manager = new CacheManager();
+    $this->assertInstanceOf(MapCache::class, $manager->createCache('map'));
+    $this->assertInstanceOf(FileSystemCache::class, $manager->createCache('file'));
+    $this->assertInstanceOf(ApcCache::class, $manager->createCache('apc'));
+    $this->assertInstanceOf(MemcachedCache::class, $manager->createCache('memcached'));
+    $this->assertInstanceOf(RedisCache::class, $manager->createCache('redis'));
+    $this->assertInstanceOf(VoidCache::class, $manager->createCache('void'));
   }
 }
 

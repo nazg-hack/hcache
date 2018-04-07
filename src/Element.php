@@ -17,6 +17,7 @@
  */
 namespace Nazg\HCache;
 
+<<__ConsistentConstruct>>
 class Element {
 
   public function __construct(
