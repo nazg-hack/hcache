@@ -46,7 +46,7 @@ class FileSystemCache extends CacheProvider {
     if (is_string($resource)) {
       $element = $this->unserializeElement($resource);
       $expiration = $element->getLifetime();
-      if ($expiration && $expiration < time()) {
+      if ($expiration && $expiration < \time()) {
         $this->delete($id);
         return;
       }
@@ -64,7 +64,7 @@ class FileSystemCache extends CacheProvider {
     if (is_string($resource)) {
       $element = $this->unserializeElement($resource);
       $expiration = $element->getLifetime();
-      if ($expiration && $expiration < time()) {
+      if ($expiration && $expiration < \time()) {
         $this->delete($id);
         return false;
       }
@@ -77,29 +77,29 @@ class FileSystemCache extends CacheProvider {
   public function save(string $id, Element $element): bool {
     $lifeTime = $element->getLifetime();
     if ($element->getLifetime() > 0) {
-      $lifeTime = time() + $element->getLifetime();
+      $lifeTime = \time() + $element->getLifetime();
     }
-    $data = serialize(new Element($element->getData(), $lifeTime));
+    $data = \serialize(new Element($element->getData(), $lifeTime));
     $filename = $this->getFilename($id);
     return $this->writeFile($filename, $data);
   }
 
   protected function writeFile(string $filename, string $content) : bool {
-    $filepath = pathinfo($filename, PATHINFO_DIRNAME);
+    $filepath = \pathinfo($filename, \PATHINFO_DIRNAME);
     if (! $this->createPathIfNeeded($filepath)) {
       return false;
     }
-    if (!is_writable($filepath)) {
+    if (!\is_writable($filepath)) {
       return false;
     }
-    $tmpFile = tempnam($filepath, 'swap');
-    @chmod($tmpFile, 0666 & (~$this->umask));
-    if (file_put_contents($tmpFile, $content) !== false) {
-      @chmod($tmpFile, 0666 & (~$this->umask));
-      if (@rename($tmpFile, $filename)) {
+    $tmpFile = \tempnam($filepath, 'swap');
+    @\chmod($tmpFile, 0666 & (~$this->umask));
+    if (\file_put_contents($tmpFile, $content) !== false) {
+      @\chmod($tmpFile, 0666 & (~$this->umask));
+      if (@\rename($tmpFile, $filename)) {
         return true;
       }
-      @unlink($tmpFile);
+      @\unlink($tmpFile);
     }
     return false;
   }
@@ -107,7 +107,7 @@ class FileSystemCache extends CacheProvider {
   <<__Override>>
   public function delete(string $id): bool {
     $filename = $this->getFilename($id);
-    return @unlink($filename) || ! file_exists($filename);
+    return @\unlink($filename) || ! \file_exists($filename);
   }
 
   <<__Override>>
@@ -119,38 +119,38 @@ class FileSystemCache extends CacheProvider {
     foreach($iterator as $file) {
       $filePath = $file->getRealPath();
       if($file->isDir()) {
-        @rmdir($filePath);
+        @\rmdir($filePath);
       } elseif($this->isFilenameEndingWithExtension($filePath)) {
-        @unlink($filePath);
+        @\unlink($filePath);
       }
     }
     return true;
   }
 
   protected function getFilename(string $id): string {
-    $hash = hash('sha256', $id);
-    $filename = bin2hex($id);
+    $hash = \hash('sha256', $id);
+    $filename = \bin2hex($id);
     if ($id === ''
-      || ((strlen($id) * 2 + $this->extensionStringLength()) > 255)
+      || ((\strlen($id) * 2 + $this->extensionStringLength()) > 255)
     ) {
       $filename = '_' . $hash;
     }
     return $this->directory
-      . DIRECTORY_SEPARATOR
-      . substr($hash, 0, 2)
-      . DIRECTORY_SEPARATOR
+      . \DIRECTORY_SEPARATOR
+      . \substr($hash, 0, 2)
+      . \DIRECTORY_SEPARATOR
       . $filename
       . $this->extension;
   }
 
   private function isFilenameEndingWithExtension(string $name) : bool {
     return $this->extension === ''
-     || strrpos($name, $this->extension) === (strlen($name) - $this->extensionStringLength());
+     || \strrpos($name, $this->extension) === (\strlen($name) - $this->extensionStringLength());
   }
 
   private function createPathIfNeeded(string $path) : bool {
-    if (! is_dir($path)) {
-      if (@mkdir($path, 0777 & (~$this->umask), true) === false && ! is_dir($path)) {
+    if (!\is_dir($path)) {
+      if (@\mkdir($path, 0777 & (~$this->umask), true) === false && ! \is_dir($path)) {
         return false;
       }
     }
@@ -159,12 +159,12 @@ class FileSystemCache extends CacheProvider {
 
   <<__Memoize>>
   protected function extensionStringLength(): int{
-    return strlen($this->extension);
+    return \strlen($this->extension);
   }
 
   <<__Memoize>>
   protected function unserializeElement(string $resource): Element {
-    $element = unserialize($resource);
+    $element = \unserialize($resource);
     if($element instanceof Element) {
       return $element;
     }
@@ -173,10 +173,10 @@ class FileSystemCache extends CacheProvider {
 
   protected function fileContains(string $id): mixed {
     $filename = $this->getFilename($id);
-    if (! is_file($filename)) {
+    if (!\is_file($filename)) {
       return false;
     }
-    $resource = file_get_contents($filename);
+    $resource = \file_get_contents($filename);
     if ($resource === false) {
       return false;
     }
