@@ -42,7 +42,7 @@ class MapCache extends CacheProvider {
       $element = $this->map->get($id);
       if($element instanceof Element) {
         $expiration = $element->getLifetime();
-        if ($expiration && $expiration < time()) {
+        if ($expiration && $expiration < \time()) {
           $this->delete($id);
           return false;
         }
@@ -54,7 +54,7 @@ class MapCache extends CacheProvider {
 
   <<__Override>>
   public function save(string $id, Element $element): bool {
-    $lifeTime = $element->getLifetime() ? time() + $element->getLifetime() : 0;
+    $lifeTime = $element->getLifetime() ? \time() + $element->getLifetime() : 0;
     $this->map->add(Pair{$id, new Element($element->getData(), $lifeTime)});
     return true;
   }
