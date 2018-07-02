@@ -3,6 +3,7 @@ sudo: required
 dist: trusty
 php:
  - hhvm
+ - hhvm-nightly
  
 services:
  - memcached

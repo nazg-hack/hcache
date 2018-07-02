@@ -15,6 +15,6 @@
  * Copyright (c) 2017-2018 Yuuki Takezawa
  *
  */
-namespace Nazg\Exception;
+namespace Nazg\HCache\Exception;
 
 final class CacheProviderNameExistsException extends \Exception { }

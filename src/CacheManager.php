@@ -17,7 +17,7 @@
  */
 namespace Nazg\HCache;
 
-use Nazg\Exception\CacheProviderNameExistsException;
+use Nazg\HCache\Exception\CacheProviderNameExistsException;
 
 class CacheManager {
 
@@ -32,7 +32,7 @@ class CacheManager {
 
   protected Map<string, (function():CacheProvider)> $userCache = Map{};
 
-  public function createCache(string $namedCache): ?CacheProvider {
+  public function createCache(string $namedCache): CacheProvider {
     if($this->cache->contains($namedCache)) {
       $cache = $this->cache->at($namedCache);
       return new $cache();
@@ -41,7 +41,7 @@ class CacheManager {
       $cache = $this->userCache->at($namedCache);
       return $cache();
     }
-    return null;
+    throw new CacheProviderNameExistsException(\sprintf('%s cache driver Not Found', $namedCache));
   }
 
   /**
