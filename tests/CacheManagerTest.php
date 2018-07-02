@@ -26,6 +26,14 @@ class CacheManagerTest extends TestCase {
     $this->assertInstanceOf(RedisCache::class, $manager->createCache('redis'));
     $this->assertInstanceOf(VoidCache::class, $manager->createCache('void'));
   }
+  
+  /**
+   * @expectedException \Nazg\HCache\Exception\CacheProviderNameExistsException
+   */
+  public function testShouldThrowException(): void {
+    $manager = new CacheManager();
+    $manager->createCache('test');
+  }
 }
 
 class NullCache extends CacheProvider {
