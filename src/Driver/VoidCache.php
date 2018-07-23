@@ -17,28 +17,28 @@
  */
 namespace Nazg\HCache\Driver;
 
-use Nazg\HCache\Element;
-use Nazg\HCache\CacheProvider;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\CacheProvider;
 
 class VoidCache extends CacheProvider {
 
   <<__Override>>
-  public function fetch(string $id): mixed {
+  public function fetch(string $_id): mixed {
     return;
   }
 
   <<__Override>>
-  public function contains(string $id): bool {
+  public function contains(string $_id): bool {
     return false;
   }
 
   <<__Override>>
-  public function save(string $id, Element $element): bool {
+  public function save(string $_id, Element $_element): bool {
     return true;
   }
 
   <<__Override>>
-  public function delete(string $id): bool {
+  public function delete(string $_id): bool {
     return true;
   }
 

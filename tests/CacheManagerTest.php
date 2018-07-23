@@ -1,10 +1,10 @@
 <?hh // strict
 
-use PHPUnit\Framework\TestCase;
-use Nazg\HCache\Element;
-use Nazg\HCache\CacheManager;
-use Nazg\HCache\CacheProvider;
-use Nazg\HCache\Driver\{MapCache, FileSystemCache, ApcCache, MemcachedCache, RedisCache, VoidCache};
+use type PHPUnit\Framework\TestCase;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\CacheManager;
+use type Nazg\HCache\CacheProvider;
+use type Nazg\HCache\Driver\{MapCache, FileSystemCache, ApcCache, MemcachedCache, RedisCache, VoidCache};
 
 class CacheManagerTest extends TestCase {
 
@@ -26,7 +26,7 @@ class CacheManagerTest extends TestCase {
     $this->assertInstanceOf(RedisCache::class, $manager->createCache('redis'));
     $this->assertInstanceOf(VoidCache::class, $manager->createCache('void'));
   }
-  
+
   /**
    * @expectedException \Nazg\HCache\Exception\CacheProviderNameExistsException
    */
@@ -38,22 +38,22 @@ class CacheManagerTest extends TestCase {
 
 class NullCache extends CacheProvider {
   <<__Override>>
-  public function fetch(string $id): mixed {
+  public function fetch(string $_id): mixed {
     return;
   }
 
   <<__Override>>
-  public function contains(string $id): bool {
+  public function contains(string $_id): bool {
     return false;
   }
 
   <<__Override>>
-  public function save(string $id, Element $element): bool {
+  public function save(string $_id, Element $_element): bool {
     return true;
   }
 
   <<__Override>>
-  public function delete(string $id): bool {
+  public function delete(string $_id): bool {
     return true;
   }
 

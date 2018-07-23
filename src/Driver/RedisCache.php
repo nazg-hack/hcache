@@ -17,9 +17,9 @@
  */
 namespace Nazg\HCache\Driver;
 
-use Redis;
-use Nazg\HCache\Element;
-use Nazg\HCache\CacheProvider;
+use type Redis;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\CacheProvider;
 
 class RedisCache extends CacheProvider {
 

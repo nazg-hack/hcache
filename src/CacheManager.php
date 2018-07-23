@@ -17,7 +17,7 @@
  */
 namespace Nazg\HCache;
 
-use Nazg\HCache\Exception\CacheProviderNameExistsException;
+use type Nazg\HCache\Exception\CacheProviderNameExistsException;
 
 class CacheManager {
 

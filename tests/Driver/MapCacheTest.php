@@ -1,8 +1,8 @@
 <?hh // strict
 
-use PHPUnit\Framework\TestCase;
-use Nazg\HCache\Element;
-use Nazg\HCache\Driver\MapCache;
+use type PHPUnit\Framework\TestCase;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\Driver\MapCache;
 
 class MapCacheTest extends TestCase {
 

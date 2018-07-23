@@ -17,11 +17,11 @@
  */
 namespace Nazg\HCache\Driver;
 
-use Nazg\HCache\Element;
-use Nazg\HCache\CacheProvider;
-use FilesystemIterator;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\CacheProvider;
+use type FilesystemIterator;
+use type RecursiveIteratorIterator;
+use type RecursiveDirectoryIterator;
 
 class FileSystemCache extends CacheProvider {
 

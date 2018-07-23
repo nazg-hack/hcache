@@ -1,8 +1,8 @@
 <?hh // strict
 
-use PHPUnit\Framework\TestCase;
-use Nazg\HCache\Element;
-use Nazg\HCache\Driver\MemcachedCache;
+use type PHPUnit\Framework\TestCase;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\Driver\MemcachedCache;
 
 class MemcachedCacheTest extends TestCase {
 

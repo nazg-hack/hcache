@@ -1,7 +1,7 @@
 <?hh // strict
 
-use PHPUnit\Framework\TestCase;
-use Nazg\HCache\Driver\VoidCache;
+use type PHPUnit\Framework\TestCase;
+use type Nazg\HCache\Driver\VoidCache;
 
 class VoidCacheTest extends TestCase {
 

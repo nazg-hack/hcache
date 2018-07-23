@@ -17,7 +17,7 @@
  */
 namespace Nazg\HCache;
 
-use Nazg\HCache\{Cacheable, FlushableCache};
+use type Nazg\HCache\{Cacheable, FlushableCache};
 
 <<__ConsistentConstruct>>
 abstract class CacheProvider implements Cacheable, FlushableCache {

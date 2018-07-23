@@ -1,9 +1,9 @@
 <?hh // strict
 
-use Redis;
-use PHPUnit\Framework\TestCase;
-use Nazg\HCache\Element;
-use Nazg\HCache\Driver\RedisCache;
+use type Redis;
+use type PHPUnit\Framework\TestCase;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\Driver\RedisCache;
 
 class RedisCacheTest extends TestCase {
 

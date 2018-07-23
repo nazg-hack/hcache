@@ -17,9 +17,9 @@
  */
 namespace Nazg\HCache\Driver;
 
-use Memcached;
-use Nazg\HCache\Element;
-use Nazg\HCache\CacheProvider;
+use type Memcached;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\CacheProvider;
 
 class MemcachedCache extends CacheProvider {
 

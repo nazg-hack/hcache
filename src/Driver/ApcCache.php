@@ -17,8 +17,8 @@
  */
 namespace Nazg\HCache\Driver;
 
-use Nazg\HCache\Element;
-use Nazg\HCache\CacheProvider;
+use type Nazg\HCache\Element;
+use type Nazg\HCache\CacheProvider;
 
 class ApcCache extends CacheProvider {
 
