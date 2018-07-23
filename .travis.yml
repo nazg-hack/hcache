@@ -2,6 +2,8 @@ language: php
 sudo: required
 dist: trusty
 php:
+ - hhvm-3.24
+ - hhvm-3.27
  - hhvm
  - hhvm-nightly
  
