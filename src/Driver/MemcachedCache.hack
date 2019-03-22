@@ -18,6 +18,7 @@ namespace Nazg\HCache\Driver;
 use type Memcached;
 use type Nazg\HCache\Element;
 use type Nazg\HCache\CacheProvider;
+use function time;
 
 class MemcachedCache extends CacheProvider {
 
@@ -55,7 +56,7 @@ class MemcachedCache extends CacheProvider {
   public function save(string $id, Element $element): bool {
     $lifeTime = $element->getLifetime();
     if ($element->getLifetime() > 30 * 24 * 3600) {
-      $lifeTime = \time() + $element->getLifetime();
+      $lifeTime = time() + $element->getLifetime();
     }
     return $this->getMemcached()->set($id, $element, (int) $lifeTime);
   }
