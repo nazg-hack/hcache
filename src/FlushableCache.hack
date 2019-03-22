@@ -1,5 +1,3 @@
-<?hh // strict
-
 /**
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,18 +10,12 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  *
- * Copyright (c) 2017-2018 Yuuki Takezawa
+ * Copyright (c) 2017-2019 Yuuki Takezawa
  *
  */
 namespace Nazg\HCache;
 
-interface Cacheable {
+interface FlushableCache {
 
-  public function fetch(string $id): mixed;
-
-  public function contains(string $id): bool;
-
-  public function save(string $id, Element $element): bool;
-
-  public function delete(string $id): bool;
+  public function flushAll(): bool;
 }

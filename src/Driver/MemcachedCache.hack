@@ -1,5 +1,3 @@
-<?hh // strict
-
 /**
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,35 +10,35 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  *
- * Copyright (c) 2017-2018 Yuuki Takezawa
+ * Copyright (c) 2017-2019 Yuuki Takezawa
  *
  */
 namespace Nazg\HCache\Driver;
 
-use type Redis;
+use type Memcached;
 use type Nazg\HCache\Element;
 use type Nazg\HCache\CacheProvider;
+use function time;
 
-class RedisCache extends CacheProvider {
+class MemcachedCache extends CacheProvider {
 
-  protected ?Redis $redis;
+  protected ?Memcached $memcached;
 
-  public function setRedis(Redis $redis): void {
-    $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-    $this->redis = $redis;
+  public function setMemcached(Memcached $memcached): void {
+    $this->memcached = $memcached;
   }
 
-  public function getRedis(): Redis {
+  public function getMemcached(): Memcached  {
     invariant(
-      $this->redis instanceof Redis,
+      $this->memcached instanceof Memcached,
       "Type mismatch"
     );
-    return $this->redis;
+    return $this->memcached;
   }
 
   <<__Override>>
   public function fetch(string $id): mixed {
-    $element = $this->getRedis()->get($id);
+    $element = $this->getMemcached()->get($id);
     if($element instanceof Element) {
       return $element->getData();
     }
@@ -49,25 +47,29 @@ class RedisCache extends CacheProvider {
 
   <<__Override>>
   public function contains(string $id): bool {
-    return $this->getRedis()->exists($id);
+    $memcached = $this->getMemcached();
+    $memcached->get($id);
+    return $memcached->getResultCode() === Memcached::RES_SUCCESS;
   }
 
   <<__Override>>
   public function save(string $id, Element $element): bool {
     $lifeTime = $element->getLifetime();
-    if ($lifeTime > 0) {
-      return $this->getRedis()->setex($id, $lifeTime, $element);
+    if ($element->getLifetime() > 30 * 24 * 3600) {
+      $lifeTime = time() + $element->getLifetime();
     }
-    return $this->getRedis()->set($id, $element);
+    return $this->getMemcached()->set($id, $element, (int) $lifeTime);
   }
 
   <<__Override>>
   public function delete(string $id): bool {
-    return $this->getRedis()->delete($id) >= 0;
+    $memcached = $this->getMemcached();
+    return $memcached->delete($id)
+      || $memcached->getResultCode() === Memcached::RES_NOTFOUND;
   }
 
   <<__Override>>
   public function flushAll(): bool {
-    return $this->getRedis()->flushDB();
+    return $this->getMemcached()->flush();
   }
 }

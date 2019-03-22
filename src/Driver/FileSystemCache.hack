@@ -1,5 +1,3 @@
-<?hh // strict
-
 /**
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,7 +10,7 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  *
- * Copyright (c) 2017-2018 Yuuki Takezawa
+ * Copyright (c) 2017-2019 Yuuki Takezawa
  *
  */
 namespace Nazg\HCache\Driver;
@@ -22,6 +20,7 @@ use type Nazg\HCache\CacheProvider;
 use type FilesystemIterator;
 use type RecursiveIteratorIterator;
 use type RecursiveDirectoryIterator;
+use function time;
 
 class FileSystemCache extends CacheProvider {
 
@@ -43,10 +42,10 @@ class FileSystemCache extends CacheProvider {
     if($resource === false) {
       return;
     }
-    if (is_string($resource)) {
+    if ($resource is string) {
       $element = $this->unserializeElement($resource);
       $expiration = $element->getLifetime();
-      if ($expiration && $expiration < \time()) {
+      if ($expiration && $expiration < time()) {
         $this->delete($id);
         return;
       }
@@ -61,10 +60,10 @@ class FileSystemCache extends CacheProvider {
     if($resource === false) {
       return false;
     }
-    if (is_string($resource)) {
+    if ($resource is string) {
       $element = $this->unserializeElement($resource);
       $expiration = $element->getLifetime();
-      if ($expiration && $expiration < \time()) {
+      if ($expiration && $expiration < time()) {
         $this->delete($id);
         return false;
       }
@@ -77,7 +76,7 @@ class FileSystemCache extends CacheProvider {
   public function save(string $id, Element $element): bool {
     $lifeTime = $element->getLifetime();
     if ($element->getLifetime() > 0) {
-      $lifeTime = \time() + $element->getLifetime();
+      $lifeTime = time() + $element->getLifetime();
     }
     $data = \serialize(new Element($element->getData(), $lifeTime));
     $filename = $this->getFilename($id);

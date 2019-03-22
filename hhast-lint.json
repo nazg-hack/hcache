@@ -1,10 +1,4 @@
 {
-  "roots": [
-    "src/",
-    "tests/"
-  ],
-  "builtinLinters": "all",
-  "namespaceAliases": {
-    "HHAST": "Facebook\\HHAST\\Linters"
-  }
+  "roots": ["src/", "tests/"],
+  "builtinLinters": "all"
 }
