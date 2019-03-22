@@ -1,5 +1,3 @@
-<?hh // strict
-
 /**
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,62 +10,62 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  *
- * Copyright (c) 2017-2018 Yuuki Takezawa
+ * Copyright (c) 2017-2019 Yuuki Takezawa
  *
  */
 namespace Nazg\HCache\Driver;
 
+use type Redis;
 use type Nazg\HCache\Element;
 use type Nazg\HCache\CacheProvider;
 
-class MapCache extends CacheProvider {
+class RedisCache extends CacheProvider {
 
-  protected Map<string, Element> $map = Map{};
+  protected ?Redis $redis;
+
+  public function setRedis(Redis $redis): void {
+    $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+    $this->redis = $redis;
+  }
+
+  public function getRedis(): Redis {
+    invariant(
+      $this->redis instanceof Redis,
+      "Type mismatch"
+    );
+    return $this->redis;
+  }
 
   <<__Override>>
   public function fetch(string $id): mixed {
-    if($this->contains($id)) {
-      $element = $this->map->get($id);
-      if($element instanceof Element) {
-        return $element->getData();
-      }
+    $element = $this->getRedis()->get($id);
+    if($element instanceof Element) {
+      return $element->getData();
     }
     return;
   }
 
   <<__Override>>
   public function contains(string $id): bool {
-    $contains = $this->map->containsKey($id);
-    if ($contains) {
-      $element = $this->map->get($id);
-      if($element instanceof Element) {
-        $expiration = $element->getLifetime();
-        if ($expiration && $expiration < \time()) {
-          $this->delete($id);
-          return false;
-        }
-        return true;
-      }
-    }
-    return $contains;
+    return $this->getRedis()->exists($id);
   }
 
   <<__Override>>
   public function save(string $id, Element $element): bool {
-    $lifeTime = $element->getLifetime() ? \time() + $element->getLifetime() : 0;
-    $this->map->add(Pair{$id, new Element($element->getData(), $lifeTime)});
-    return true;
+    $lifeTime = $element->getLifetime();
+    if ($lifeTime > 0) {
+      return $this->getRedis()->setex($id, $lifeTime, $element);
+    }
+    return $this->getRedis()->set($id, $element);
   }
 
   <<__Override>>
   public function delete(string $id): bool {
-    $this->map->remove($id);
-    return true;
+    return $this->getRedis()->delete($id) >= 0;
   }
 
   <<__Override>>
   public function flushAll(): bool {
-    $this->map->clear();
-    return true;
+    return $this->getRedis()->flushDB();
   }
 }

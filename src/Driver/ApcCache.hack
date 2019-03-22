@@ -1,5 +1,3 @@
-<?hh // strict
-
 /**
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,62 +10,38 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  *
- * Copyright (c) 2017-2018 Yuuki Takezawa
+ * Copyright (c) 2017-2019 Yuuki Takezawa
  *
  */
 namespace Nazg\HCache\Driver;
 
-use type Redis;
 use type Nazg\HCache\Element;
 use type Nazg\HCache\CacheProvider;
 
-class RedisCache extends CacheProvider {
-
-  protected ?Redis $redis;
-
-  public function setRedis(Redis $redis): void {
-    $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-    $this->redis = $redis;
-  }
-
-  public function getRedis(): Redis {
-    invariant(
-      $this->redis instanceof Redis,
-      "Type mismatch"
-    );
-    return $this->redis;
-  }
+class ApcCache extends CacheProvider {
 
   <<__Override>>
   public function fetch(string $id): mixed {
-    $element = $this->getRedis()->get($id);
-    if($element instanceof Element) {
-      return $element->getData();
-    }
-    return;
+    return \apc_fetch($id);
   }
 
   <<__Override>>
   public function contains(string $id): bool {
-    return $this->getRedis()->exists($id);
+    return \apc_exists($id);
   }
 
   <<__Override>>
   public function save(string $id, Element $element): bool {
-    $lifeTime = $element->getLifetime();
-    if ($lifeTime > 0) {
-      return $this->getRedis()->setex($id, $lifeTime, $element);
-    }
-    return $this->getRedis()->set($id, $element);
+    return \apc_store($id, $element->getData(), $element->getLifetime());
   }
 
   <<__Override>>
   public function delete(string $id): bool {
-    return $this->getRedis()->delete($id) >= 0;
+    return \apc_delete($id);
   }
 
   <<__Override>>
   public function flushAll(): bool {
-    return $this->getRedis()->flushDB();
+    return \apc_clear_cache() && \apc_clear_cache('user');
   }
 }

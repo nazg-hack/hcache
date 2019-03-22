@@ -1,5 +1,3 @@
-<?hh // strict
-
 /**
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -12,38 +10,24 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  *
- * Copyright (c) 2017-2018 Yuuki Takezawa
+ * Copyright (c) 2017-2019 Yuuki Takezawa
  *
  */
-namespace Nazg\HCache\Driver;
+namespace Nazg\HCache;
 
-use type Nazg\HCache\Element;
-use type Nazg\HCache\CacheProvider;
+<<__ConsistentConstruct>>
+class Element {
 
-class VoidCache extends CacheProvider {
+  public function __construct(
+    protected mixed $data,
+    protected int $lifetime = 0
+  ) { }
 
-  <<__Override>>
-  public function fetch(string $_id): mixed {
-    return;
+  public function getData(): mixed {
+    return $this->data;
   }
 
-  <<__Override>>
-  public function contains(string $_id): bool {
-    return false;
-  }
-
-  <<__Override>>
-  public function save(string $_id, Element $_element): bool {
-    return true;
-  }
-
-  <<__Override>>
-  public function delete(string $_id): bool {
-    return true;
-  }
-
-  <<__Override>>
-  public function flushAll(): bool {
-    return true;
+  public function getLifetime(): int {
+    return $this->lifetime;
   }
 }

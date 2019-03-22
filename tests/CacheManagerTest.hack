@@ -1,38 +1,36 @@
-<?hh // strict
-
-use type PHPUnit\Framework\TestCase;
+use type Facebook\HackTest\HackTest;
+use function Facebook\FBExpect\expect;
 use type Nazg\HCache\Element;
 use type Nazg\HCache\CacheManager;
 use type Nazg\HCache\CacheProvider;
 use type Nazg\HCache\Driver\{MapCache, FileSystemCache, ApcCache, MemcachedCache, RedisCache, VoidCache};
 
-class CacheManagerTest extends TestCase {
+final class CacheManagerTest extends HackTest {
 
   public function testShouldReturnNullCacheInstance(): void {
     $manager = new CacheManager();
     $manager->addCache('null', () ==> new NullCache());
-    $this->assertInstanceOf(NullCache::class, $manager->createCache('null'));
+    expect($manager->createCache('null'))->toBeInstanceOf(NullCache::class);
     // override cache driver
     $manager->addCache('map', () ==> new NullCache());
-    $this->assertInstanceOf(NullCache::class, $manager->createCache('map'));
+    expect($manager->createCache('map'))->toBeInstanceOf(NullCache::class);
   }
 
   public function testShouldReturnCacheDrivers(): void {
     $manager = new CacheManager();
-    $this->assertInstanceOf(MapCache::class, $manager->createCache('map'));
-    $this->assertInstanceOf(FileSystemCache::class, $manager->createCache('file'));
-    $this->assertInstanceOf(ApcCache::class, $manager->createCache('apc'));
-    $this->assertInstanceOf(MemcachedCache::class, $manager->createCache('memcached'));
-    $this->assertInstanceOf(RedisCache::class, $manager->createCache('redis'));
-    $this->assertInstanceOf(VoidCache::class, $manager->createCache('void'));
+    expect($manager->createCache('map'))->toBeInstanceOf(MapCache::class);
+    expect($manager->createCache('file'))->toBeInstanceOf(FileSystemCache::class);
+    expect($manager->createCache('apc'))->toBeInstanceOf(ApcCache::class);
+    expect($manager->createCache('memcached'))->toBeInstanceOf(MemcachedCache::class);
+    expect($manager->createCache('redis'))->toBeInstanceOf(RedisCache::class);
+    expect($manager->createCache('void'))->toBeInstanceOf(VoidCache::class);
   }
 
-  /**
-   * @expectedException \Nazg\HCache\Exception\CacheProviderNameExistsException
-   */
   public function testShouldThrowException(): void {
-    $manager = new CacheManager();
-    $manager->createCache('test');
+    expect(() ==> {
+      $manager = new CacheManager();
+      $manager->createCache('test');
+    })->toThrow(\Nazg\HCache\Exception\CacheProviderNameExistsException::class);
   }
 }
 

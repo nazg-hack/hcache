@@ -1,5 +1,3 @@
-<?hh // strict
-
 /**
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -20,30 +18,54 @@ namespace Nazg\HCache\Driver;
 use type Nazg\HCache\Element;
 use type Nazg\HCache\CacheProvider;
 
-class ApcCache extends CacheProvider {
+class MapCache extends CacheProvider {
+
+  protected Map<string, Element> $map = Map{};
 
   <<__Override>>
   public function fetch(string $id): mixed {
-    return \apc_fetch($id);
+    if($this->contains($id)) {
+      $element = $this->map->get($id);
+      if($element instanceof Element) {
+        return $element->getData();
+      }
+    }
+    return;
   }
 
   <<__Override>>
   public function contains(string $id): bool {
-    return \apc_exists($id);
+    $contains = $this->map->containsKey($id);
+    if ($contains) {
+      $element = $this->map->get($id);
+      if($element instanceof Element) {
+        $expiration = $element->getLifetime();
+        if ($expiration && $expiration < \time()) {
+          $this->delete($id);
+          return false;
+        }
+        return true;
+      }
+    }
+    return $contains;
   }
 
   <<__Override>>
   public function save(string $id, Element $element): bool {
-    return \apc_store($id, $element->getData(), $element->getLifetime());
+    $lifeTime = $element->getLifetime() ? \time() + $element->getLifetime() : 0;
+    $this->map->add(Pair{$id, new Element($element->getData(), $lifeTime)});
+    return true;
   }
 
   <<__Override>>
   public function delete(string $id): bool {
-    return \apc_delete($id);
+    $this->map->remove($id);
+    return true;
   }
 
   <<__Override>>
   public function flushAll(): bool {
-    return \apc_clear_cache() && \apc_clear_cache('user');
+    $this->map->clear();
+    return true;
   }
 }
