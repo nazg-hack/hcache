@@ -25,7 +25,6 @@ class CacheManager {
     'map' => \Nazg\HCache\Driver\MapCache::class,
     'file' => \Nazg\HCache\Driver\FileSystemCache::class,
     'memcached' => \Nazg\HCache\Driver\MemcachedCache::class,
-    'redis' => \Nazg\HCache\Driver\RedisCache::class,
   };
 
   protected Map<string, (function():CacheProvider)> $userCache = Map{};
