@@ -11,7 +11,7 @@ $ hhvm -d xdebug.enable=0 -d hhvm.jit=0 -d hhvm.php7.all=1\
 
 ## Usage
 
-*supported apc, memcached, redis, map, void, filesystem*
+*supported apc, memcached, map, void, filesystem*
 
 ### Using the CacheManager
 
@@ -181,19 +181,5 @@ $cache = new MemcachedCache();
 $mc = new \Memcached('mc');
 $mc->addServers([['127.0.0.1', 11211]]);
 $cache->setMemcached($mc);
-$cache->save("qwerty", new Element('testing:cache', 0));
-```
-
-#### RedisCache
-
-```hack
-<?hh
-use Nazg\HCache\Element;
-use Nazg\HCache\Driver\RedisCache;
-
-$cache = new RedisCache();
-$redis = new Redis();
-$redis->connect('127.0.0.1', 6379);
-$cache->setRedis($redis);
 $cache->save("qwerty", new Element('testing:cache', 0));
 ```

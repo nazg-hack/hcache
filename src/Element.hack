@@ -23,10 +23,12 @@ class Element {
     protected int $lifetime = 0
   ) { }
 
+  <<__Rx>>
   public function getData(): mixed {
     return $this->data;
   }
 
+  <<__Rx>>
   public function getLifetime(): int {
     return $this->lifetime;
   }

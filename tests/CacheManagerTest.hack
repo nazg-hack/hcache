@@ -22,7 +22,6 @@ final class CacheManagerTest extends HackTest {
     expect($manager->createCache('file'))->toBeInstanceOf(FileSystemCache::class);
     expect($manager->createCache('apc'))->toBeInstanceOf(ApcCache::class);
     expect($manager->createCache('memcached'))->toBeInstanceOf(MemcachedCache::class);
-    expect($manager->createCache('redis'))->toBeInstanceOf(RedisCache::class);
     expect($manager->createCache('void'))->toBeInstanceOf(VoidCache::class);
   }
 

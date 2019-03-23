@@ -11,8 +11,5 @@ env:
    - HHVM_VERSION=latest
 install:
  - docker pull hhvm/hhvm:$HHVM_VERSION
- - docker pull redis:5.0-alpine
 script:
- - docker network create testing-network
- - docker run --name redis --network testing-network
- - docker run --name hhvm --rm -w /var/source -v $(pwd):/var/source hhvm/hhvm:$HHVM_VERSION ./.travis.sh
+ - docker run --rm -w /var/source -v $(pwd):/var/source hhvm/hhvm:$HHVM_VERSION ./.travis.sh
