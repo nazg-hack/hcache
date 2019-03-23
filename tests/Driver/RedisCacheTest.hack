@@ -16,7 +16,7 @@ class RedisCacheTest extends HackTest {
   public function testFetchShouldReturnNull2(): void {
     $cache = new RedisCache();
     $redis = new Redis();
-    $redis->connect('127.0.0.1', 6379);
+    $redis->connect('redis', 6379);
     $cache->setRedis($redis);
     $cache->save("qwerty", new Element('testing:cache', 0));
     expect($cache->fetch("qwerty"))->toBeSame('testing:cache');
