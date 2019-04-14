@@ -30,7 +30,7 @@ class MapCache extends CacheProvider {
         return $element->getData();
       }
     }
-    return;
+    return null;
   }
 
   <<__Override>>

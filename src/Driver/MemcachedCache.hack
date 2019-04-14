@@ -30,7 +30,7 @@ class MemcachedCache extends CacheProvider {
 
   public function getMemcached(): Memcached  {
     invariant(
-      $this->memcached instanceof Memcached,
+      $this->memcached is Memcached,
       "Type mismatch"
     );
     return $this->memcached;
@@ -39,10 +39,10 @@ class MemcachedCache extends CacheProvider {
   <<__Override>>
   public function fetch(string $id): mixed {
     $element = $this->getMemcached()->get($id);
-    if($element instanceof Element) {
+    if($element is Element) {
       return $element->getData();
     }
-    return;
+    return null;
   }
 
   <<__Override>>
