@@ -14,7 +14,7 @@ install:
  - docker pull hhvm/hhvm:$HHVM_VERSION
  - docker images
 script:
- - docker run /bin/bash -c "apt-get update && apt-get -y upgrade"
- - docker run /bin/bash -c "apt-get install memcached"
- - docker run /bin/bash -c "apt-get install redis-server"
+ - docker exec /bin/bash -c "apt-get update && apt-get -y upgrade"
+ - docker exec /bin/bash -c "apt-get install memcached"
+ - docker exec /bin/bash -c "apt-get install redis-server"
  - docker run --rm -w /var/source -v $(pwd):/var/source hhvm/hhvm:$HHVM_VERSION ./.travis.sh
