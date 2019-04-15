@@ -2,25 +2,24 @@ sudo: required
 language: generic
 services:
  - docker
- - redis-server
- - memcached
-
 env:
   matrix:
+   - DOCKER_COMPOSE_VERSION=1.23.2
    - HHVM_VERSION=4.0.0
    - HHVM_VERSION=4.0.1
    - HHVM_VERSION=4.0.2
    - HHVM_VERSION=4.0.3
    - HHVM_VERSION=4.1.0
    - HHVM_VERSION=latest
-install:
- - docker pull hhvm/hhvm:$HHVM_VERSION
- - docker images
+before_install:
+ - sudo rm /usr/local/bin/docker-compose
+ - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+ - chmod +x docker-compose
+ - sudo mv docker-compose /usr/local/bin
+ - docker-compose build
+ - docker-compose up -d
 script:
- - docker run --rm -v $(pwd):/var/source --name hhvm -td hhvm/hhvm:$HHVM_VERSION 
- #-w /var/source -v $(pwd):/var/source hhvm/hhvm:$HHVM_VERSION
- - docker exec -it hhvm /bin/bash -c "apt-get update && apt-get -y upgrade"
- - docker exec -it hhvm /bin/bash -c "apt-get install -y memcached"
- - docker exec -it hhvm /bin/bash -c "apt-get install -y redis-server"
- - docker exec -it -w /var/source hhvm ./.travis.sh
- #- docker run --rm -w /var/source -v $(pwd):/var/source hhvm/hhvm:$HHVM_VERSION ./.travis.sh
+ - docker-compose exec hhvm /bin/bash -c 'cd /var/source && composer update'
+ - docker-compose exec hhvm /bin/bash -c 'cd /var/source && hh_client && hhvm ./vendor/bin/hacktest.hack tests/'
+matrix:
+  fast_finish: true
