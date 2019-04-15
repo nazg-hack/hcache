@@ -6,3 +6,5 @@
 /tests/ export-ignore
 /.hhconfig export-ignore
 hhast-lint.json export-ignore
+docker-compose.yml
+/docker

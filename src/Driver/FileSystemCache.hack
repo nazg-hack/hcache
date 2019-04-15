@@ -40,18 +40,18 @@ class FileSystemCache extends CacheProvider {
   public function fetch(string $id): mixed {
     $resource = $this->fileContains($id);
     if($resource === false) {
-      return;
+      return null;
     }
     if ($resource is string) {
       $element = $this->unserializeElement($resource);
       $expiration = $element->getLifetime();
       if ($expiration && $expiration < time()) {
         $this->delete($id);
-        return;
+        return null;
       }
       return $element->getData();
     }
-    return;
+    return null;
   }
 
   <<__Override>>
@@ -164,7 +164,7 @@ class FileSystemCache extends CacheProvider {
   <<__Memoize>>
   protected function unserializeElement(string $resource): Element {
     $element = \unserialize($resource);
-    if($element instanceof Element) {
+    if($element is Element) {
       return $element;
     }
     return new Element('', -1);

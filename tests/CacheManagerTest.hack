@@ -36,7 +36,7 @@ final class CacheManagerTest extends HackTest {
 class NullCache extends CacheProvider {
   <<__Override>>
   public function fetch(string $_id): mixed {
-    return;
+    return null;
   }
 
   <<__Override>>
