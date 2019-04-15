@@ -17,7 +17,7 @@ install:
  - docker pull hhvm/hhvm:$HHVM_VERSION
  - docker images
 script:
- - docker run --rm --name hhvm -td hhvm/hhvm:$HHVM_VERSION -v $(pwd):/var/source 
+ - docker run --rm -v $(pwd):/var/source --name hhvm -td hhvm/hhvm:$HHVM_VERSION 
  #-w /var/source -v $(pwd):/var/source hhvm/hhvm:$HHVM_VERSION
  - docker exec -it hhvm /bin/bash -c "apt-get update && apt-get -y upgrade"
  - docker exec -it hhvm /bin/bash -c "apt-get install -y memcached"
