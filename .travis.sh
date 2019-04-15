@@ -1,12 +1,7 @@
 #!/bin/bash
 set -ex
 apt update -y
-DEBIAN_FRONTEND=noninteractive apt install -y memcached redis-server php-cli zip unzip
-
-systemctl status memcached
-systemctl start memcached
-systemctl status redis-server
-systemctl start redis-server
+DEBIAN_FRONTEND=noninteractive apt install -y php-cli zip unzip
 
 hhvm --version
 php --version
