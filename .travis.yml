@@ -3,10 +3,11 @@ language: generic
 services:
  - docker
 env:
+  global:
   - DOCKER_COMPOSE_VERSION=1.23.2
-matrix:
+  matrix:
   - HHVM_VERSION=4.0.0
-  - HHVM_VERSION=4.0.1
+  - HHVM_VERSION=4.0.1 
   - HHVM_VERSION=4.0.2
   - HHVM_VERSION=4.0.3
   - HHVM_VERSION=4.1.0
