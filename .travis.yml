@@ -3,14 +3,15 @@ language: generic
 services:
  - docker
 env:
-  matrix:
-   - DOCKER_COMPOSE_VERSION=1.23.2
-   - HHVM_VERSION=4.0.0
-   - HHVM_VERSION=4.0.1
-   - HHVM_VERSION=4.0.2
-   - HHVM_VERSION=4.0.3
-   - HHVM_VERSION=4.1.0
-   - HHVM_VERSION=latest
+  - DOCKER_COMPOSE_VERSION=1.23.2
+matrix:
+  - HHVM_VERSION=4.0.0
+  - HHVM_VERSION=4.0.1
+  - HHVM_VERSION=4.0.2
+  - HHVM_VERSION=4.0.3
+  - HHVM_VERSION=4.1.0
+  - HHVM_VERSION=latest
+
 before_install:
  - sudo rm /usr/local/bin/docker-compose
  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
