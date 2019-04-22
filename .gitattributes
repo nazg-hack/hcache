@@ -8,3 +8,4 @@
 hhast-lint.json export-ignore
 docker-compose.yml
 /docker
+*.hack linguist-language=Hack
