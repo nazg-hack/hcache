@@ -1,27 +1,36 @@
 sudo: required
 language: generic
 services:
- - docker
+- docker
 env:
   global:
   - DOCKER_COMPOSE_VERSION=1.23.2
   matrix:
-  - HHVM_VERSION=4.0.0
-  - HHVM_VERSION=4.0.1 
-  - HHVM_VERSION=4.0.2
-  - HHVM_VERSION=4.0.3
-  - HHVM_VERSION=4.1.0
+  - HHVM_VERSION=4.4.0
+  - HHVM_VERSION=4.5.0
+  - HHVM_VERSION=4.6.0
+  - HHVM_VERSION=4.7.0
+  - HHVM_VERSION=4.8.0
+  - HHVM_VERSION=4.9.0
+  - HHVM_VERSION=4.10.0
+  - HHVM_VERSION=4.11.0
+  - HHVM_VERSION=4.12.0
+  - HHVM_VERSION=4.13.0
+  - HHVM_VERSION=4.14.0
   - HHVM_VERSION=latest
-
 before_install:
- - sudo rm /usr/local/bin/docker-compose
- - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
- - chmod +x docker-compose
- - sudo mv docker-compose /usr/local/bin
- - docker-compose build
- - docker-compose up -d
+- sudo rm /usr/local/bin/docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+  -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv docker-compose /usr/local/bin
+- docker-compose build
+- docker-compose up -d
 script:
- - docker-compose exec hhvm /bin/bash -c 'cd /var/source && composer update'
- - docker-compose exec hhvm /bin/bash -c 'cd /var/source && hh_client && hhvm ./vendor/bin/hacktest.hack tests/'
+- docker-compose exec hhvm /bin/bash -c 'cd /var/source && composer update'
+- docker-compose exec hhvm /bin/bash -c 'cd /var/source && hh_client && hhvm ./vendor/bin/hacktest.hack tests/'
 matrix:
   fast_finish: true
+notifications:
+  slack:
+    secure: ZW7K6x0vaKX8Pil1KB8iSKXkQBG0MPxjEQGgawvnQBU/bk2hNEw6+hOj98M7vg6ttxqajEas2TchwQol8Uq/7Ezuw0rFQPXVCk0Jnjrpc0bAIVd7JDkiUAdIjT4zOkR8CFHFHLcJo/TSwLzFDZkgviLw1YaXyJGiAsb9vzL/bp1r4fVKrKTrlWm/epsMBCr5m03c393hcogXGD/RFWQTfayAk87+MzdH917RIGgDp+BuJHvJVcqu/qBC2d1POFOGrG+VwMHzzBQlqKlDh2gbQe4ij+xfjyUH1vJ3QKKO9N9QsUKMvpAMuvwuxFT//7NJBCYjbnpT6NO82pbgeUraAXp92djIY+mO22/JuE7fQ9OWuWwCd0sOs37u6dtsozaDnxResY3vtjLy3vDyVl6q67MN1OGBnpXiLdPbbD86ATIBSIUUSWxsrAuTgDbmeTkWSLd600/oJCrGlTAK/THKx6/X3e/QwWzvbx7CsYl283cvKYy4eeyEx9/x48smtiMHPvv8HnldyyUNeDyig6zrzuwMNrtZbt6epkvt9O3CpE/rqmpmkBWQ/MiYrBLkKL1eldiA3l0KEMccNvLfaviZ7uWKs7S2/RfsnpKDfCJltXfFNSZHFLsnIkNIBziL5+MSFse2gB/DpYDBbKcaP0XHrbPZdRNHotzPVojofeHvX40=

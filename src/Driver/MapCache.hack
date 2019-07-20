@@ -26,7 +26,7 @@ class MapCache extends CacheProvider {
   public function fetch(string $id): mixed {
     if($this->contains($id)) {
       $element = $this->map->get($id);
-      if($element instanceof Element) {
+      if($element is Element) {
         return $element->getData();
       }
     }
@@ -38,7 +38,7 @@ class MapCache extends CacheProvider {
     $contains = $this->map->containsKey($id);
     if ($contains) {
       $element = $this->map->get($id);
-      if($element instanceof Element) {
+      if($element is Element) {
         $expiration = $element->getLifetime();
         if ($expiration && $expiration < \time()) {
           $this->delete($id);

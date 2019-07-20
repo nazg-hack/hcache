@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "hhvm": "^4.0",
+    "hhvm": "^4.4",
     "hhvm/hsl": "^4.0",
     "hhvm/hsl-experimental": "^4.0",
     "hhvm/hhvm-autoload": "^2.0.0"
@@ -32,11 +32,8 @@
     }
   },
   "autoload-dev": {
-  "classmap": [
+    "classmap": [
       "tests/"
     ]
-  },
-  "scripts": {
-    "test": "./vendor/bin/phpunit"
   }
 }
