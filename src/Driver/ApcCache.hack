@@ -17,31 +17,41 @@ namespace Nazg\HCache\Driver;
 
 use type Nazg\HCache\Element;
 use type Nazg\HCache\CacheProvider;
+use function apc_fetch;
+use function apc_exists;
+use function apc_store;
+use function apc_delete;
+use function apc_clear_cache;
 
 class ApcCache extends CacheProvider {
 
   <<__Override>>
   public function fetch(string $id): mixed {
-    return \apc_fetch($id);
+    $success = true;
+    $result = apc_fetch($id, inout $success);
+    if ($success) {
+      return $result;
+    }
+    return null;
   }
 
   <<__Override>>
   public function contains(string $id): bool {
-    return \apc_exists($id);
+    return apc_exists($id);
   }
 
   <<__Override>>
   public function save(string $id, Element $element): bool {
-    return \apc_store($id, $element->getData(), $element->getLifetime());
+    return apc_store($id, $element->getData(), $element->getLifetime());
   }
 
   <<__Override>>
   public function delete(string $id): bool {
-    return \apc_delete($id);
+    return apc_delete($id);
   }
 
   <<__Override>>
   public function flushAll(): bool {
-    return \apc_clear_cache() && \apc_clear_cache('user');
+    return apc_clear_cache() && apc_clear_cache('user');
   }
 }
