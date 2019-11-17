@@ -13,7 +13,7 @@ class MemcachedCacheTest extends HackTest {
         ['memcached', 11211],
       ));
       expect($cache->fetch("qwerty"))->toBeNull();
-    })->toThrow(\HH\InvariantException::class);
+    })->toThrow(InvariantException::class);
   }
 
   public function testFetchShouldReturnNull2(): void {
