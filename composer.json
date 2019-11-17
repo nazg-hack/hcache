@@ -16,14 +16,14 @@
     }
   ],
   "require": {
-    "hhvm": "^4.4",
+    "hhvm": "^4.25",
     "hhvm/hsl": "^4.0",
-    "hhvm/hsl-experimental": "^4.0",
-    "hhvm/hhvm-autoload": "^2.0.0"
+    "hhvm/hsl-experimental": "^4.25",
+    "hhvm/hhvm-autoload": "^2.0.10"
   },
   "require-dev": {
-    "hhvm/hacktest": "^1.4",
-    "facebook/fbexpect": "^2.5.2",
+    "hhvm/hacktest": "^2.0.0",
+    "facebook/fbexpect": "^2.7.3",
     "hhvm/hhast": "^4.0.0"
   },
   "autoload": {
@@ -34,6 +34,14 @@
   "autoload-dev": {
     "classmap": [
       "tests/"
+    ]
+  },
+  "scripts": {
+    "tests": [
+      "hhvm ./vendor/bin/hacktest.hack tests/"
+    ],
+    "register": [
+      "hhvm ./vendor/bin/hh-autoload.hack"
     ]
   }
 }

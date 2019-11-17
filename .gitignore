@@ -1,3 +1,6 @@
 composer.phar
 composer.lock
 vendor/
+docker/
+.vscode
+*.hhast.parser-cache
