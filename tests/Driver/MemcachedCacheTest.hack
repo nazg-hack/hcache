@@ -23,6 +23,8 @@ class MemcachedCacheTest extends HackTest {
       array('memcached', 11211)
     ));
     $cache->setMemcached($mc);
+    expect($cache->fetch("qwerty"))->toBeNull();
+    $cache->save("qwerty", new Element('testing:cache', 5));
     expect($cache->fetch("qwerty"))->toBeSame('testing:cache');
     expect($cache->fetch("qwerty"))->toBeSame('testing:cache');
     $cache->delete("qwerty");
