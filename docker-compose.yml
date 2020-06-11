@@ -10,10 +10,6 @@ services:
     command: hhvm --mode server -vServer.AllowRunAsRoot=1 
     restart: always
     tty: true
-  redis:
-    image: redis:4-alpine3.8
-    ports:
-    - "6379:6379"
   memcached:
     image: memcached:latest
     ports:

@@ -6,15 +6,9 @@ env:
   global:
   - DOCKER_COMPOSE_VERSION=1.25.1
   matrix:
-    - HHVM_VERSION=4.35.0
-    - HHVM_VERSION=4.36.0
-    - HHVM_VERSION=4.38.0
-    - HHVM_VERSION=4.39.0
-    - HHVM_VERSION=4.40.0
-    - HHVM_VERSION=4.41.0
-    - HHVM_VERSION=4.42.0
-    - HHVM_VERSION=4.43.0
-    - HHVM_VERSION=4.44.0
+    - HHVM_VERSION=4.58.1
+    - HHVM_VERSION=4.59.0
+    - HHVM_VERSION=4.60.0
     - HHVM_VERSION=latest
 before_install:
 - sudo rm /usr/local/bin/docker-compose
