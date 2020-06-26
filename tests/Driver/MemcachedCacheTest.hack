@@ -9,7 +9,7 @@ class MemcachedCacheTest extends HackTest {
     expect(() ==> {
       $cache = new MemcachedCache();
       $mc = new Memcached('mc');
-      $mc->addServers(vec(
+      $mc->addServers(varray(
         array('memcached', 11211)
       ));
       expect($cache->fetch("qwerty"))->toBeNull();
@@ -19,7 +19,7 @@ class MemcachedCacheTest extends HackTest {
   public function testFetchShouldReturnNull2(): void {
     $cache = new MemcachedCache();
     $mc = new Memcached('mc');
-    $mc->addServers(vec(
+    $mc->addServers(varray(
       array('memcached', 11211)
     ));
     $cache->setMemcached($mc);
