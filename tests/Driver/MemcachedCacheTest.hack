@@ -9,9 +9,7 @@ class MemcachedCacheTest extends HackTest {
     expect(() ==> {
       $cache = new MemcachedCache();
       $mc = new Memcached('mc');
-      $mc->addServers(darray(
-        array('memcached', 11211)
-      ));
+      $mc->addServer('memcached', 11211);
       expect($cache->fetch("qwerty"))->toBeNull();
     })->toThrow(InvariantException::class);
   }
@@ -19,13 +17,10 @@ class MemcachedCacheTest extends HackTest {
   public function testFetchShouldReturnNull2(): void {
     $cache = new MemcachedCache();
     $mc = new Memcached('mc');
-    $mc->addServers(darray(
-      array('memcached', 11211)
-    ));
+    $mc->addServer('memcached', 11211);
     $cache->setMemcached($mc);
     expect($cache->fetch("qwerty"))->toBeNull();
     $cache->save("qwerty", new Element('testing:cache', 5));
-    expect($cache->fetch("qwerty"))->toBeSame('testing:cache');
     expect($cache->fetch("qwerty"))->toBeSame('testing:cache');
     $cache->delete("qwerty");
     expect($cache->fetch("qwerty"))->toBeNull();
